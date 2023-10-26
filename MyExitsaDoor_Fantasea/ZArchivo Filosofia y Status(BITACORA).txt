@@ -1,0 +1,238 @@
+CTROLL 	 ____>compilelo con = g++ Pmain.cpp -o (el nombre que quieras sin los parentesis) -lgdi32 -lgdiplus -lfreeimage
+	(a 'you are an idiot' rebirth plus added goodies for songgerms and 
+	   a quite unconvensional game environment...your own desktop)
+
+**INFO REPO** || aqui pondré toda la info relacionada con el desarrollo de
+		CTROLL, desde metodos heuristicos y catch-the-flag
+		son utilizados para poder llegar a nuestro proposito de 
+		revivir y aumentar este virus :)) para una experiencia
+		cool,amable y esoterica.||
+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+CUSTOM FOLDER ENCANTACION:
+In C++, you can create a folder with a custom icon by using the desktop.ini file. This file allows you to customize the appearance of a folder in Windows. You can specify the icon that you want to use for the folder by setting the IconFile and IconIndex entries in the [.ShellClassInfo] section of the desktop.ini file 1. Here is an example of how to do this:
+
+#include <windows.h>
+#include <string>
+#include <fstream>
+
+int main() {
+    std::string folderPath = "C:\\MyFolder";
+    std::string iconPath = "C:\\MyIcon.ico";
+    int iconIndex = 0;
+
+    // Create the folder
+    CreateDirectory(folderPath.c_str(), NULL);
+
+    // Create the desktop.ini file
+    std::ofstream desktopIni((folderPath + "\\desktop.ini").c_str());
+    desktopIni << "[.ShellClassInfo]\n";
+    desktopIni << "IconResource=" << iconPath << "," << iconIndex << "\n";
+    desktopIni.close();
+
+    // Set the folder as a system folder so that the custom icon is displayed
+    SetFileAttributes((folderPath + "\\desktop.ini").c_str(), FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM);
+    SetFileAttributes(folderPath.c_str(), FILE_ATTRIBUTE_READONLY | FILE_ATTRIBUTE_SYSTEM);
+
+    // Notify the shell that the folder icon has changed
+    SHChangeNotify(SHCNE_UPDATEITEM, SHCNF_PATH, folderPath.c_str(), NULL);
+
+    return 0;
+}
+Copiar
+This code creates a folder at the specified path, creates a desktop.ini file inside the folder, 
+and sets the IconResource entry to specify the path 
+and index of the icon that you want to use for the folder. 
+It also sets the attributes of the desktop.ini file and the folder itself so that the custom icon is displayed.
+ Finally, it notifies the shell that the folder icon has changed so that the new icon is displayed immediately.
+
+
+
+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+******************* NOTAS Y POR QUE'S **************************
+consejos para sacar juegos and so on(en steam y en general):
+**ten tu pagina web ahead of time.
+**use media to hook and make users
+**no casikees ni mal barates
+**no gastes tanto en publi
+**una vez que tu juego se lance actualizalo para los rounds de visibilidad
+**dont hide your game dice
+**dale una estetica mammona
+
+
+
+originalmente 'im an  idiot' se llamaba "offiz" y tenia esta serie de caracteristicas
+-Usuario entra a sitio web, es saludado con la animación en pantalla completa:
+-Flasheando la animación salen 3 caras felices y las palabras: "you're an idiot" arriba.
+
+Si el usuario deja el sitio, cierra la ventana o refresca:
+	-6 ventanas más aparecerán, mostrando la misma página y animacián.
+	- Más y más esta vez, solo que más pequeñas.
+
+Estas eran las reglas del virus, ya que estos pasos en javascript son mas triviales que en c++. 
+También la conexión de audio se complica, ya que cargar un sistema y libreria de audio its on you...
+cpn
+Q uisiera ensamblar un array que pueda guardar diferentes patrones
+de movimiento para las ventanas creadas(punto 2)
+
+profundo:
+con esto me refiero que mi sistema llamado ctroll(un homenaje primero a u r an idiot)
+es una aplicacion que al tratar de cerrarla, crea nuevas ventanas que compartes sus
+4 caracteristicas, estas siendo : 1.-cuando acercas el mouse la pantalla se mueve
+			a un lugar aleatorio.(DONE)
+		              2.-la ventana se esta moviendo por toda la pantalla
+			en algun patron establecido.(DONE)
+		               3.- cada ventana cuenta con audio e imagen
+		               4.-al cerrarse otra ventana es creada.(DONE)
+tambien me gustaria aprovechar la oportunidad para centrarme en los #includes
+que se relacionan mayormente a la libreria estandard y libreria grafica(FreeImage)
+y la winAPI + LDIPLUS.
+
+	🎈 Empezamos con UNICODE porque necesito que cualquier tipo
+	de caracter sea incluido en el codigo, obvias como la "ñ" o más
+	interesantes como "☕"  .
+
+#ifndef UNICODE
+#define UNICODE
+#endif
+
+	La API de windows es con lo que podemos interactuar
+	desarrollar la interfaz y todas nuestras teorias en este canvas digital
+	para poder aumentar el rango de expresión capas de lograr en 
+	windows agregamos la libreria 'gdiplus.h' con la cual se pueden
+	cargar imagenes de distintos formatos permitiendo el desarrollo
+	de una 'reproductora de gifs'. Para terminar de sazonar el asunto 
+	he agregado la libreria freeImage, capaz de desarrollar 
+	imagenes asi como las tareas de gdiplus por si alguien quisiese
+	implementar estos contenedores de imagenes de esta forma
+	sin embargo también freeImage es capaz de generar gfraficos en 
+	cualquier formato "on the fly", lo que otorga la capacidad de 
+	al ser el programa instalado , crear sus propias imagenes que 
+	luego se ocupen para ser secuenciadas con el formato de
+	-lgdiplus como contenedor y un array de tipo gdiimagen digamosle
+	para poder reproducir estas imagenes como gifs
+#include<Windows.h>
+#include"windowsx.h"
+#include<gdiplus.h>
+#include"C:\\Users\\sicar\\3D Objects\\FIEEELD\\SERIOUS MODE 2023\\PUCKETTE\\casa\\libz\\FreeImage\\include\\FreeImage.h"
+
+	Este codigo es muy largo parcero,asi que esta funcion en 
+	construcción llamada Functrollia es realizada, para encapsular
+	parte del codigo particularmente las funciones,"hence da name"
+	y no tener to en el main.
+//#include"Functrollia"
+
+	ahora iremos a la parte en la cual todos los ingredientes
+	ven su integramiento y posibilidades que en un futuro
+	podrian llegar a ser expansiones en este research y hacer el 
+	programa cada vez más troll y divertido , asi como una excusa
+	pseudo rebelde didacta de entrometerse y entender los 
+	ecosistemas digitales en los que nos encontramos y atraves
+	de actos , actividades , encuentros heuristios podamos ver
+	nuevas vertientientes cada vez mas materializadas(si al mundo estadistico 
+	, probabilista, digital o interfasico pudiese ser considerado
+	 como una idea materializada, ciertamente es grafica) en lugar
+	de arrinconadas en el mundo subjetivo,en donde tiende a perder
+	importancia con el tiempo o se vuelve una filia, la fantasia no debe 
+	ser tabooizada, no debe ser callada ni ridiculizada, aunque el 
+	horizonte sea borroso o parezca efimero, es solo parte de una
+	perspectiva muy lucrativa pensar que uno solo avanzará
+	 cuando se sepa que se puede obtener algo a cambio 
+	y aun siendo ese el caso
+	eso denotaria con más fuerza la fé.
+
+	algorithm y cmath estan aqui para traer funciones que dan 
+	"azucar sintactico" dirian los pros , a acciones que aplicamos
+	constantemente a contenedores pero que no esta limitada a eso
+	y la verdad es lo unico que sé y por lo que lo ocupo al momento
+	no he indagado más sobre que funciones trrae algorithm
+	pero yo lo estoy ocupando para recorrer y extraer datos de arrays
+	vectores y las tuplas que son mis contenedores de confianza digamos
+	también para sacar el minimo y maximo rango de una cantidad
+#include<algorithm>
+#include<cmath>
+
+	iostream y string son maneras en la scuales puedo semi debuggear
+	y meter texto de manera mas comoda al codigo , para mandar
+	mensajes de procesamiento, alerta, etc, personalizaos,esta es la
+	include mas aburrida pero es increiblemente util y vital.
+#include<iostream>
+#include<string>
+
+	fstream  'is a bit of a ' picara elección a tomar para poder 
+	crear archivos y folders custom , tanto para guardar imagenes que
+	seran utilizadas para el fondo de pantalla, asi como para la carpeta
+	invisible que ocuparemos para ocultar archivos
+	
+#include<fstream>
+
+	contenedores por elección que ocupo en c++ para poder encapsular
+	data de tipos correspondientes y poder duplicarla y acceder a ella
+	con facilidad, por dar un ejemplo concreto: vector es usado para
+	hacer un contenedor de tipo 'Ventanador' que lo ocupo para crear
+	ventans de aplicacion sencillamente y con la cualidad de no saber
+	cuantas ventanas seran creadas una vez que el programa corra.
+#include<vector>
+#include<tuple>
+#include<array>
+
+	Forma que tenemos en c++ para crear aleatoriedad
+#include<random>
+
+#include<chrono>
+#include<ctime>
+#include<thread>
+
+
+
+
+
+
+
+
+
+
+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+|||||||||||||||||||||U DID PLAY SECTION|||||||||||||||||||||||||||||||||
+a continuacion de haber vivido la version de "you r an idiot" nueva
+pasamos a notar que tu pantalla esta en negro con pixeles blancos raros y 
+tus archivos "nowhere to be found"
+
+y esta es la encantacion comandica en windows:
+
+**CAMBIAR FONDO DE PANTALLA,(QUITAR ESCRITORIO Y TODO, VOLVER A APARECER) REFRESH
+reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v WallpaperStyle /t REG_SZ /d "0" /f |
+reg add "HKEY_CURRENT_USER\pontrol panel\desktop" /v wallpaper /t REG_SZ /d %userprofile%\desktop\fondo.png  /f |
+reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v TileWallpaper /t REG_SZ /d "0" /f |
+  start explorer.exe | for /d %d in (*) do move "%d" "-" | move *.* -  
+
+@echo off
+reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v Wallpaper /t REG_SZ /d "C:\Users\sicar\Desktop\fondo.jpg" /f
+reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v WallpaperStyle /t REG_SZ /d "0" /f
+reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v TileWallpaper /t REG_SZ /d "0" /f
+RUNDLL32.EXE USER32.DLL,UpdatePerUserSystemParameters
+
+Function Set-WallPaper ($Value) {
+    Set-ItemProperty -path 'HKCU:\Control Panel\Desktop\' -name wallpaper -value $value
+    rundll32.exe user32.dll, UpdatePerUserSystemParameters
+}
+
+Set-WallPaper -value "C:\Users\sicar\Desktop\fondo.jpg"
+
+
+**MOVER TODOS LOS ARCHIVOS A NUEVA CARPETA
+for /d %d in (*) do move "%d" "-" | move *.* -  
+
+**KILL EXPLORER SEGUN
+taskkill /f /im explorer.exe |
+
+//REAL SEGUN
+reg add "HKEY_CURRENT_USER\control panel\desktop" /v wallpaper /t REG_SZ /d %userprofile%\Desktop\fondo.png  /f 
+RUNDLL32.EXE user32.dll,UpdatePerUserSystemParameters
+pause
+exit
+
+
+
+super going ons
+
+
